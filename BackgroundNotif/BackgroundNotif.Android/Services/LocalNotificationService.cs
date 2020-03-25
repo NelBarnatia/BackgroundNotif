@@ -65,7 +65,7 @@ namespace BackgroundNotif.Droid.Services
             var alarmManager = GetAlarmManager();
             alarmManager.Cancel(pendingIntent);
             var notificationManager = NotificationManagerCompat.From(AndroidApp.Context);
-            //notificationManager.CancelAll();
+            notificationManager.CancelAll();
             notificationManager.Cancel(id);
         }
 

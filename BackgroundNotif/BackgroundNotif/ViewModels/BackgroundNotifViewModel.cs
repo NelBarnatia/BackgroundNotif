@@ -66,7 +66,7 @@ namespace BackgroundNotif.ViewModels
                 MessageText = string.Empty;
                 SelectedTime = DateTime.Now.TimeOfDay;
                 SelectedDate = DateTime.Today;
-                DependencyService.Get<ILocalNotificationService>().CancelAll();
+                DependencyService.Get<ILocalNotificationService>().Cancel(id);
             }
         }
 
@@ -107,13 +107,12 @@ namespace BackgroundNotif.ViewModels
             }
         }
 
-        private int id;
+        int id = 1;
 
         void SaveLocalNotification()
         {
             if (NotificationONOFF == true)
             {
-                id++;
                 var date = (SelectedDate.Date.Month.ToString("00") + "-" + SelectedDate.Date.Day.ToString("00") + "-" + SelectedDate.Date.Year.ToString());
                 var time = Convert.ToDateTime(SelectedTime.ToString()).ToString("HH:mm");
                 var dateTime = date + " " + time;
