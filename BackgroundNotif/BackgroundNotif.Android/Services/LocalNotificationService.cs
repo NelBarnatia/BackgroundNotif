@@ -18,15 +18,18 @@ namespace BackgroundNotif.Droid.Services
     #region Service
     public class LocalNotificationService : ILocalNotificationService
     {
-        int _notificationIconId { get; set; }
-        readonly DateTime _jan1st1970 = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-        internal string _randomNumber;
+        #region Fields
+        int notificationId { get; set; }
+        readonly DateTime dateTime1970 = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+        internal string randomNumber;
+        #endregion
 
+        #region Public Methods
         public void LocalNotification(string title, string body, int id, DateTime notifyTime)
         {
             //long repeateDay = 1000 * 60 * 60 * 24;    
-            long repeateForMinute = 10000; // In milliseconds   
-            long totalMilliSeconds = (long)(notifyTime.ToUniversalTime() - _jan1st1970).TotalMilliseconds;
+            long repeateForMinute = 60000; // In milliseconds   
+            long totalMilliSeconds = (long)(notifyTime.ToUniversalTime() - dateTime1970).TotalMilliseconds;
             if (totalMilliSeconds < JavaSystem.CurrentTimeMillis())
                 totalMilliSeconds += repeateForMinute;
 
@@ -39,8 +42,8 @@ namespace BackgroundNotif.Droid.Services
                 NotifyTime = notifyTime
             };
 
-            if (_notificationIconId != 0)
-                localNotification.IconId = _notificationIconId;
+            if (notificationId != 0)
+                localNotification.IconId = notificationId;
             else
                 localNotification.IconId = Resource.Mipmap.icon;
 
@@ -48,9 +51,9 @@ namespace BackgroundNotif.Droid.Services
             intent.PutExtra(ScheduledAlarmHandler.LocalNotificationKey, serializedNotification);
 
             Random generator = new Random();
-            _randomNumber = generator.Next(100000, 999999).ToString("D6");
+            randomNumber = generator.Next(100000, 999999).ToString("D6");
 
-            var pendingIntent = PendingIntent.GetBroadcast(AndroidApp.Context, Convert.ToInt32(_randomNumber), intent, PendingIntentFlags.Immutable);
+            var pendingIntent = PendingIntent.GetBroadcast(AndroidApp.Context, Convert.ToInt32(randomNumber), intent, PendingIntentFlags.Immutable);
             var alarmManager = GetAlarmManager();
             alarmManager.SetRepeating(AlarmType.RtcWakeup, totalMilliSeconds, repeateForMinute, pendingIntent);
         }
@@ -58,7 +61,7 @@ namespace BackgroundNotif.Droid.Services
         public void Cancel(int id)
         {
             var intent = CreateIntent(id);
-            var pendingIntent = PendingIntent.GetBroadcast(AndroidApp.Context, Convert.ToInt32(_randomNumber), intent, PendingIntentFlags.Immutable);
+            var pendingIntent = PendingIntent.GetBroadcast(AndroidApp.Context, Convert.ToInt32(randomNumber), intent, PendingIntentFlags.Immutable);
             var alarmManager = GetAlarmManager();
             alarmManager.Cancel(pendingIntent);
             var notificationManager = NotificationManagerCompat.From(AndroidApp.Context);
@@ -69,7 +72,7 @@ namespace BackgroundNotif.Droid.Services
         public void CancelAll()
         {
             var intent = new Intent(AndroidApp.Context, typeof(ScheduledAlarmHandler));
-            var pendingIntent = PendingIntent.GetBroadcast(AndroidApp.Context, Convert.ToInt32(_randomNumber), intent, PendingIntentFlags.Immutable);
+            var pendingIntent = PendingIntent.GetBroadcast(AndroidApp.Context, Convert.ToInt32(randomNumber), intent, PendingIntentFlags.Immutable);
             var alarmManager = GetAlarmManager();
             alarmManager.Cancel(pendingIntent);
             var notificationManager = NotificationManagerCompat.From(AndroidApp.Context);
@@ -82,8 +85,9 @@ namespace BackgroundNotif.Droid.Services
             var packageName = AndroidApp.Context.PackageName;
             return AndroidApp.Context.PackageManager.GetLaunchIntentForPackage(packageName);
         }
+        #endregion
 
-
+        #region Private Methods
         private Intent CreateIntent(int id)
         {
             return new Intent(AndroidApp.Context, typeof(ScheduledAlarmHandler))
@@ -106,6 +110,7 @@ namespace BackgroundNotif.Droid.Services
                 return stringWriter.ToString();
             }
         }
+        #endregion
     }
     #endregion
 
@@ -127,7 +132,7 @@ namespace BackgroundNotif.Droid.Services
                 .SetContentTitle(notification.Title)
                 .SetContentText(notification.Body)
                 .SetSmallIcon(Resource.Mipmap.icon)
-                .SetSound(RingtoneManager.GetDefaultUri(RingtoneType.Ringtone))
+                .SetDefaults((int)NotificationDefaults.Sound | (int)NotificationDefaults.Vibrate)
                 .SetAutoCancel(true);
 
             var resultIntent = LocalNotificationService.GetLauncherActivity();

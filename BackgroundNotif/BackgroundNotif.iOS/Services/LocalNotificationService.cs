@@ -44,6 +44,11 @@ namespace BackgroundNotif.iOS.Services
                 UIApplication.SharedApplication.CancelAllLocalNotifications();
             }
         }
+
+        public void CancelAll()
+        {
+            UIApplication.SharedApplication.CancelAllLocalNotifications();
+        }
     }
 
     public static class DateTimeExtensions
