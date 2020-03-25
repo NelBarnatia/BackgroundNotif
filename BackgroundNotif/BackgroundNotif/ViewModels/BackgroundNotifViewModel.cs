@@ -58,6 +58,7 @@ namespace BackgroundNotif.ViewModels
                 Switch_Toggled();
             }
         }
+
         void Switch_Toggled()
         {
             if (NotificationONOFF == false)
@@ -65,9 +66,10 @@ namespace BackgroundNotif.ViewModels
                 MessageText = string.Empty;
                 SelectedTime = DateTime.Now.TimeOfDay;
                 SelectedDate = DateTime.Today;
-                DependencyService.Get<ILocalNotificationService>().Cancel(0);
+                DependencyService.Get<ILocalNotificationService>().CancelAll();
             }
         }
+
         DateTime _selectedDate = DateTime.Today;
         public DateTime SelectedDate
         {
@@ -104,44 +106,37 @@ namespace BackgroundNotif.ViewModels
                 SetProperty(ref _messageText, value);
             }
         }
+
+        private int id;
+
         void SaveLocalNotification()
         {
             if (NotificationONOFF == true)
             {
+                id++;
                 var date = (SelectedDate.Date.Month.ToString("00") + "-" + SelectedDate.Date.Day.ToString("00") + "-" + SelectedDate.Date.Year.ToString());
                 var time = Convert.ToDateTime(SelectedTime.ToString()).ToString("HH:mm");
                 var dateTime = date + " " + time;
                 var selectedDateTime = DateTime.ParseExact(dateTime, "MM-dd-yyyy HH:mm", CultureInfo.InvariantCulture);
                 if (!string.IsNullOrEmpty(MessageText))
                 {
-                    DependencyService.Get<ILocalNotificationService>().Cancel(0);
-                    DependencyService.Get<ILocalNotificationService>().LocalNotification("Local Notification", MessageText, 0, selectedDateTime);
+                    DependencyService.Get<ILocalNotificationService>().Cancel(id);
+                    DependencyService.Get<ILocalNotificationService>().LocalNotification("Local Notification", MessageText, id, selectedDateTime);
                     App.Current.MainPage.DisplayAlert("LocalNotificationDemo", "Notification details saved successfully ", "Ok");
                 }
                 else
-                {
                     App.Current.MainPage.DisplayAlert("LocalNotificationDemo", "Please enter meassage", "OK");
-                }
             }
             else
-            {
                 App.Current.MainPage.DisplayAlert("LocalNotificationDemo", "Please switch on notification", "OK");
-            }
-        }        
-        
-        void CancelLocalNotification()
-        {
-            if (NotificationONOFF == true)
-            {
-                DependencyService.Get<ILocalNotificationService>().Cancel(0);
-                App.Current.MainPage.DisplayAlert("LocalNotificationDemo", "Notification details canceled successfully ", "Ok");
-            }
-            else
-            {
-                App.Current.MainPage.DisplayAlert("LocalNotificationDemo", "Please switch on notification", "OK");
-            }
         }
 
+        void CancelLocalNotification()
+        {
+            DependencyService.Get<ILocalNotificationService>().CancelAll();
+            DependencyService.Get<ILocalNotificationService>().Cancel(id);
+            App.Current.MainPage.DisplayAlert("LocalNotificationDemo", "Notification details canceled successfully ", "Ok");
+        }
 
         protected bool SetProperty<T>(ref T backingStore, T value, [CallerMemberName] string propertyName = "", Action onChanged = null)
         {

@@ -10,7 +10,7 @@ using TaskStackBuilder = Android.Support.V4.App.TaskStackBuilder;
 
 namespace BackgroundNotif.Droid
 {
-    [Activity(Label = "BackgroundNotif", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Label = "Demo Notif", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         const string channelId = "default";
