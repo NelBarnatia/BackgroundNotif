@@ -28,7 +28,7 @@ namespace BackgroundNotif.Droid.Services
             long repeateForMinute = 10000; // In milliseconds   
             long totalMilliSeconds = (long)(notifyTime.ToUniversalTime() - _jan1st1970).TotalMilliseconds;
             if (totalMilliSeconds < JavaSystem.CurrentTimeMillis())
-                totalMilliSeconds = totalMilliSeconds + repeateForMinute;
+                totalMilliSeconds += repeateForMinute;
 
             var intent = CreateIntent(id);
             var localNotification = new LocalNotification
@@ -62,7 +62,7 @@ namespace BackgroundNotif.Droid.Services
             var alarmManager = GetAlarmManager();
             alarmManager.Cancel(pendingIntent);
             var notificationManager = NotificationManagerCompat.From(AndroidApp.Context);
-            notificationManager.CancelAll();
+            //notificationManager.CancelAll();
             notificationManager.Cancel(id);
         }
 
