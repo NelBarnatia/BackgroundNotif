@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="BackgroundNotif.MainPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Local Notification"
+    BackgroundColor="#533F95"
+    mc:Ignorable="d">
+    <ContentPage.Content>
+        <Grid
+            Padding="25,40,25,30"
+            RowSpacing="20"
+            VerticalOptions="FillAndExpand">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <StackLayout HorizontalOptions="FillAndExpand" Orientation="Horizontal">
+                    <Label
+                        FontSize="16"
+                        HorizontalOptions="StartAndExpand"
+                        Text="Notifications ON/OFF"
+                        TextColor="White"
+                        VerticalOptions="Center" />
+                    <Switch
+                        HorizontalOptions="EndAndExpand"
+                        IsToggled="{Binding NotificationONOFF}"
+                        VerticalOptions="Center" />
+                </StackLayout>
+            </Grid>
+            <Grid Grid.Row="1">
+                <StackLayout HorizontalOptions="FillAndExpand" Orientation="Horizontal">
+                    <Label
+                        FontSize="15"
+                        HorizontalOptions="StartAndExpand"
+                        Text="SET TIME"
+                        TextColor="White"
+                        VerticalOptions="Center" />
+                    <TimePicker
+                        BackgroundColor="Transparent"
+                        Format="t"
+                        HorizontalOptions="EndAndExpand"
+                        TextColor="White"
+                        Time="{Binding SelectedTime}" />
+                </StackLayout>
+            </Grid>
+            <Grid Grid.Row="2">
+                <StackLayout HorizontalOptions="FillAndExpand" Orientation="Horizontal">
+                    <Label
+                        FontSize="15"
+                        HorizontalOptions="StartAndExpand"
+                        Text="SET DATE"
+                        TextColor="White"
+                        VerticalOptions="Center" />
+                    <DatePicker
+                        BackgroundColor="Transparent"
+                        Date="{Binding SelectedDate}"
+                        Format="MM-dd-yyyy"
+                        HorizontalOptions="EndAndExpand"
+                        TextColor="White" />
+                </StackLayout>
+            </Grid>
+            <Grid Grid.Row="3">
+                <StackLayout HorizontalOptions="FillAndExpand" Spacing="10">
+                    <Label
+                        FontSize="15"
+                        HorizontalOptions="StartAndExpand"
+                        Text="Enter Message"
+                        TextColor="White"
+                        VerticalOptions="Center" />
+                    <Editor
+                        BackgroundColor="White"
+                        HeightRequest="120"
+                        HorizontalOptions="FillAndExpand"
+                        Text="{Binding MessageText}"
+                        TextColor="Purple" />
+                </StackLayout>
+            </Grid>
+            <Grid Grid.Row="4">
+                <StackLayout Orientation="Vertical">
+                    <Button
+                        BackgroundColor="Purple"
+                        BorderRadius="15"
+                        Command="{Binding SaveCommand}"
+                        FontSize="15"
+                        HorizontalOptions="FillAndExpand"
+                        Text="Save"
+                        TextColor="White" />
+
+                    <Button
+                        BackgroundColor="Purple"
+                        BorderRadius="15"
+                        Command="{Binding CancelCommand}"
+                        FontSize="15"
+                        HorizontalOptions="FillAndExpand"
+                        Text="Cancel"
+                        TextColor="White" />
+                </StackLayout>
+            </Grid>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>
